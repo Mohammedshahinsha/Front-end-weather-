@@ -25,6 +25,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
         
+      - name: Prepare for build
+        run: |
+          cp vite.config.deploy.ts vite.config.ts
+        
       - name: Build
         run: npm run build
         
