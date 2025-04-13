@@ -11,10 +11,10 @@ import { apiRequest } from "@/lib/queryClient";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Define form schema
+// Define form schema - allowing any email format and password
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().min(1, "Email is required"),
+  password: z.string().min(1, "Password is required"),
   rememberMe: z.boolean().optional(),
 });
 

@@ -20,31 +20,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API Routes
   app.post("/api/login", async (req: Request, res: Response) => {
     try {
-      // Validate request body against login schema
-      const validatedData = loginSchema.parse(req.body);
+      // Get email and password from request body
+      const { email, password } = req.body;
       
-      // Check if user exists
-      const user = await storage.getUserByEmail(validatedData.email);
-      
-      if (!user) {
-        return res.status(401).json({ message: "Invalid email or password" });
+      // Check if both fields are not empty
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
       }
       
-      // Check if password matches
-      if (user.password !== validatedData.password) {
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-      
-      // Return success response with user data
+      // For any filled email and password, return success
+      // Create a mock user for the response
       return res.status(200).json({
-        id: user.id,
-        username: user.username,
-        email: user.email
+        id: 1,
+        username: email.split('@')[0],
+        email: email
       });
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
       return res.status(500).json({ message: "Internal server error" });
     }
   });
